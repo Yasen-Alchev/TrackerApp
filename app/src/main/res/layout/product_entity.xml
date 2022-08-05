@@ -1,0 +1,66 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/product_date_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginRight="6sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:singleLine="false"
+        android:layout_weight="0.5"
+        tools:text="date"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/product_name_text_view"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="start"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:singleLine="false"
+        android:layout_marginLeft="6sp"
+        android:layout_marginRight="6sp"
+        tools:text="name"
+        tools:ignore="RtlCompat" />
+
+    <TextView
+        android:id="@+id/product_price_text_view"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginLeft="6sp"
+        android:layout_marginRight="6sp"
+        android:singleLine="false"
+        tools:text="price" />
+
+    <TextView
+        android:id="@+id/product_quantity_text_view"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginLeft="6sp"
+        android:singleLine="false"
+        tools:text="quantity" />
+
+</LinearLayout>
