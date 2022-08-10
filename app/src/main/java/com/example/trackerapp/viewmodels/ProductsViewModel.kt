@@ -22,10 +22,9 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
         productDao.insert(product)
     }
 
-    fun addNewProduct(productName: String, productPrice: Double, productQuantity: Int) {
+    suspend fun addNewProduct(productName: String, productPrice: Double, productQuantity: Int) {
 
-
-        CoroutineScope(Dispatchers.IO).launch{
+        val res = withContext(Dispatchers.IO){
             val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
             val productFlowList = productDao.findProductWithNameAndPrice(productName, productPrice)
             var count = productQuantity
@@ -45,15 +44,51 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
                     }
                     println("count = $count")
                     productDao.updateProductQuantity(productName, productPrice, count)
+                    println("first @collect")
                     return@collect
                 }
                 productDao.updateProductQuantity(productName, productPrice, productQuantity)
+                println("second @collect")
                 return@collect
             }
+            println("end of ifs reached")
             productDao.updateProductQuantity(productName, productPrice, productQuantity)
-            return@launch
         }
     }
+
+//        CoroutineScope(Dispatchers.IO).launch{
+//            val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
+//            val productFlowList = productDao.findProductWithNameAndPrice(productName, productPrice)
+//            var count = productQuantity
+//
+//            productFlowList.collect {
+//                println("it = $it")
+//                println("size = ${it.size}")
+//
+//                if(it.size == 0){
+//                    insertProduct(newProduct)
+//                    return@collect
+//                }
+//                else if(it.size > 1){
+//                    count += it.sumOf { x -> x.productQuantity }
+//                    while(it.size > 1){
+//                        it.get(0)
+//                    }
+//                    println("count = $count")
+//                    productDao.updateProductQuantity(productName, productPrice, count)
+//                    return@collect
+//                }
+//                productDao.updateProductQuantity(productName, productPrice, productQuantity)
+//                return@collect
+//            }
+//            productDao.updateProductQuantity(productName, productPrice, productQuantity)
+//            return@launch
+//
+//        }
+//        return withContext(Dispatchers.IO){
+//
+//        }
+//    }
 
     private fun getNewProductEntry(productName: String, productPrice: Double, productQuantity: Int): Product {
         return Product(

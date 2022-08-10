@@ -18,7 +18,10 @@ import com.example.trackerapp.database.ProductsApplication
 import com.example.trackerapp.databinding.FragmentProductsBinding
 import com.example.trackerapp.viewmodels.ProductsViewModel
 import com.example.trackerapp.viewmodels.ProductsViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 
 class ProductsFragment : Fragment() {
@@ -94,12 +97,14 @@ class ProductsFragment : Fragment() {
 
     private fun addNewProduct() {
         if (isEntryValid()) {
-            viewModel.addNewProduct(
-                binding.productName.text.toString(),
-                binding.productPrice.text.toString().toDouble(),
-                binding.productQuantity.text.toString().toInt(),
-            )
-            activity?.let { it -> hideKeyboard(it) }
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.addNewProduct(
+                    binding.productName.text.toString(),
+                    binding.productPrice.text.toString().toDouble(),
+                    binding.productQuantity.text.toString().toInt(),
+                )
+                activity?.let { it -> hideKeyboard(it) }
+            }
         }
         else{
             val toast = Toast.makeText(context, "Invalid Data", Toast.LENGTH_LONG)
