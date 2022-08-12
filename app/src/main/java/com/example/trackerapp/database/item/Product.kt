@@ -11,14 +11,15 @@ import java.util.*
 data class Product(
     @PrimaryKey(autoGenerate = true) @NonNull @ColumnInfo(name = "rowid")
     val uid: Int = 0,
+    @NonNull @ColumnInfo(name = "date") @TypeConverters(DateTypeConverter::class)
+    var date: Date,
     @NonNull @ColumnInfo(name = "product_name")
     val productName: String,
     @NonNull @ColumnInfo(name = "product_price")
     val productPrice: Double,
     @NonNull @ColumnInfo(name = "product_quantity")
     val productQuantity: Int,
-    @NonNull @ColumnInfo(name = "date") @TypeConverters(DateTypeConverter::class)
-    var date: Date
+
 ){
     override fun toString(): String {
         return "$productName -> $productPrice lv -> $productQuantity units"

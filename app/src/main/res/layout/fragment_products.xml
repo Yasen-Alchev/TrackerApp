@@ -60,6 +60,8 @@
         android:layout_marginBottom="449dp"
         android:autofillHints="@string/item_count_text"
         android:hint="@string/item_count_text"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
         android:inputType="numberSigned"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/product_quantity_label" />

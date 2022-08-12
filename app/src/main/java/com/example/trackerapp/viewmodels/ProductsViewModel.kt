@@ -1,5 +1,7 @@
 package com.example.trackerapp.viewmodels
 
+import android.nfc.Tag
+import android.os.Build.VERSION_CODES.P
 import android.util.Log
 import androidx.core.os.persistableBundleOf
 import androidx.lifecycle.ViewModel
@@ -7,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.trackerapp.database.item.Product
 import com.example.trackerapp.database.item.ProductDao
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.toList
 import java.util.*
@@ -19,78 +22,31 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
     fun getAll(): Flow<List<Product>> = productDao.getAll()
 
     private fun insertProduct(product: Product){
+        println(TAG + " -> insertProduct called")
         productDao.insert(product)
     }
 
-    suspend fun addNewProduct(productName: String, productPrice: Double, productQuantity: Int) {
-
-        val res = withContext(Dispatchers.IO){
-            val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
-            val productFlowList = productDao.findProductWithNameAndPrice(productName, productPrice)
+    fun addNewProduct(productName: String, productPrice: Double, productQuantity: Int) {
+        CoroutineScope(Dispatchers.IO).launch{
+            val productList = productDao.findProductWithNameAndPrice(productName, productPrice)
+            val size = productList.size
             var count = productQuantity
 
-            productFlowList.collect {
-                println("it = $it")
-                println("size = ${it.size}")
-
-                if(it.size == 0){
-                    insertProduct(newProduct)
-                    return@collect
-                }
-                else if(it.size > 1){
-                    count += it.sumOf { x -> x.productQuantity }
-                    while(it.size > 1){
-                        it.get(0)
-                    }
-                    println("count = $count")
-                    productDao.updateProductQuantity(productName, productPrice, count)
-                    println("first @collect")
-                    return@collect
-                }
-                productDao.updateProductQuantity(productName, productPrice, productQuantity)
-                println("second @collect")
-                return@collect
+            if(size == 0){
+                val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
+                insertProduct(newProduct)
+                return@launch
             }
-            println("end of ifs reached")
-            productDao.updateProductQuantity(productName, productPrice, productQuantity)
+            count += productList.sumOf { x -> x.productQuantity }
+            while(size > 1){
+                productDao.delete(productList[size-1])
+            }
+            productDao.updateProductQuantity(productName, productPrice, count)
         }
     }
 
-//        CoroutineScope(Dispatchers.IO).launch{
-//            val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
-//            val productFlowList = productDao.findProductWithNameAndPrice(productName, productPrice)
-//            var count = productQuantity
-//
-//            productFlowList.collect {
-//                println("it = $it")
-//                println("size = ${it.size}")
-//
-//                if(it.size == 0){
-//                    insertProduct(newProduct)
-//                    return@collect
-//                }
-//                else if(it.size > 1){
-//                    count += it.sumOf { x -> x.productQuantity }
-//                    while(it.size > 1){
-//                        it.get(0)
-//                    }
-//                    println("count = $count")
-//                    productDao.updateProductQuantity(productName, productPrice, count)
-//                    return@collect
-//                }
-//                productDao.updateProductQuantity(productName, productPrice, productQuantity)
-//                return@collect
-//            }
-//            productDao.updateProductQuantity(productName, productPrice, productQuantity)
-//            return@launch
-//
-//        }
-//        return withContext(Dispatchers.IO){
-//
-//        }
-//    }
-
     private fun getNewProductEntry(productName: String, productPrice: Double, productQuantity: Int): Product {
+        println("getNewProductEntry called")
         return Product(
             productName = productName,
             productPrice = productPrice,
@@ -105,6 +61,10 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
             return false
         }
         return true
+    }
+
+    private fun logThread(methodName: String){
+        println("logThread debug: $methodName : ${Thread.currentThread().name}")
     }
 }
 

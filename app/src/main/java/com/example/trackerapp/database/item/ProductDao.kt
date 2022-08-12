@@ -24,7 +24,7 @@ interface ProductDao {
     fun updateProductQuantity(productName: String, productPrice: Double, productQuantity: Int)
 
     @Query("SELECT *, product.rowid FROM product WHERE product_name = :productName AND product_price = :productPrice")
-    fun findProductWithNameAndPrice(productName: String, productPrice: Double): Flow<List<Product>>
+    fun findProductWithNameAndPrice(productName: String, productPrice: Double): List<Product>
 
     @Delete
     fun delete(product: Product)

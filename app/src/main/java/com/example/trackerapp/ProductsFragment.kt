@@ -2,10 +2,9 @@ package com.example.trackerapp
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -18,9 +17,7 @@ import com.example.trackerapp.database.ProductsApplication
 import com.example.trackerapp.databinding.FragmentProductsBinding
 import com.example.trackerapp.viewmodels.ProductsViewModel
 import com.example.trackerapp.viewmodels.ProductsViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.coroutineContext
 
 
@@ -65,8 +62,10 @@ class ProductsFragment : Fragment() {
 
         // When Enter is pressed on last edit text box add item by default,
         binding.productQuantity.setOnEditorActionListener{ _, actionId, event ->
-            addNewProduct()
-            return@setOnEditorActionListener true
+            if(KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_UP == event.action){
+                addNewProduct()
+            }
+            true
         }
     }
 
@@ -97,14 +96,13 @@ class ProductsFragment : Fragment() {
 
     private fun addNewProduct() {
         if (isEntryValid()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.addNewProduct(
-                    binding.productName.text.toString(),
-                    binding.productPrice.text.toString().toDouble(),
-                    binding.productQuantity.text.toString().toInt(),
-                )
-                activity?.let { it -> hideKeyboard(it) }
-            }
+            println("addNewProduct after isEntryValid calling viewModel.addNewProduct")
+            viewModel.addNewProduct(
+                binding.productName.text.toString(),
+                binding.productPrice.text.toString().toDouble(),
+                binding.productQuantity.text.toString().toInt(),
+            )
+            activity?.let { it -> hideKeyboard(it) }
         }
         else{
             val toast = Toast.makeText(context, "Invalid Data", Toast.LENGTH_LONG)
