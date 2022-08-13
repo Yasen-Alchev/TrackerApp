@@ -5,6 +5,7 @@ import androidx.databinding.adapters.Converters
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 @Dao
 interface ProductDao {
@@ -25,6 +26,9 @@ interface ProductDao {
 
     @Query("SELECT *, product.rowid FROM product WHERE product_name = :productName AND product_price = :productPrice")
     fun findProductWithNameAndPrice(productName: String, productPrice: Double): List<Product>
+
+    @Query("SELECT *, product.rowid FROM product WHERE product_name = :productName AND product_price = :productPrice AND strftime('%Y-%m-%d', date / 1000, 'unixepoch') = :productDate")
+    fun findProductWithNamePriceAndDate(productDate: String, productName: String, productPrice: Double): List<Product>
 
     @Delete
     fun delete(product: Product)

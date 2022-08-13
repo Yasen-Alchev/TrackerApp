@@ -24,14 +24,5 @@ data class Product(
     override fun toString(): String {
         return "$productName -> $productPrice lv -> $productQuantity units"
     }
-
-    fun getForDay(): Date? {
-        return date
-    }
-
-    fun setForDay(date: Date) {
-        this.date = date
-    }
-
 }
 

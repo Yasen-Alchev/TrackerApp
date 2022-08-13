@@ -96,7 +96,6 @@ class ProductsFragment : Fragment() {
 
     private fun addNewProduct() {
         if (isEntryValid()) {
-            println("addNewProduct after isEntryValid calling viewModel.addNewProduct")
             viewModel.addNewProduct(
                 binding.productName.text.toString(),
                 binding.productPrice.text.toString().toDouble(),

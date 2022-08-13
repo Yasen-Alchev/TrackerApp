@@ -1,19 +1,16 @@
 package com.example.trackerapp.viewmodels
 
-import android.nfc.Tag
-import android.os.Build.VERSION_CODES.P
 import android.util.Log
-import androidx.core.os.persistableBundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.trackerapp.database.item.DateTypeConverter
 import com.example.trackerapp.database.item.Product
 import com.example.trackerapp.database.item.ProductDao
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.toList
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 private const val TAG = "ProductsViewModel"
 
@@ -28,20 +25,44 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
 
     fun addNewProduct(productName: String, productPrice: Double, productQuantity: Int) {
         CoroutineScope(Dispatchers.IO).launch{
-            val productList = productDao.findProductWithNameAndPrice(productName, productPrice)
-            val size = productList.size
-            var count = productQuantity
+
+            val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val newProductDate = dateFormat.format(newProduct.date)
+
+            val productList = productDao.findProductWithNamePriceAndDate(newProductDate ,productName, productPrice)
+            var size = productList.size
+
+            println("size = $size")
 
             if(size == 0){
-                val newProduct = getNewProductEntry(productName, productPrice, productQuantity)
                 insertProduct(newProduct)
                 return@launch
             }
-            count += productList.sumOf { x -> x.productQuantity }
+
+            val mostRecentProduct = productList.maxBy{ x -> x.date}
+
+            val cal1 = Calendar.getInstance()
+            val cal2 = Calendar.getInstance()
+            cal1.time = mostRecentProduct.date
+            cal2.time = newProduct.date
+
+            var sameDay = cal1[Calendar.DAY_OF_YEAR] === cal2[Calendar.DAY_OF_YEAR] &&
+                    cal1[Calendar.YEAR] === cal2[Calendar.YEAR]
+
+            if(!sameDay){
+                insertProduct(newProduct)
+                return@launch
+            }
+
             while(size > 1){
                 productDao.delete(productList[size-1])
+                size--
             }
-            productDao.updateProductQuantity(productName, productPrice, count)
+
+            var quantity = productQuantity
+            quantity += productList.sumOf { x -> x.productQuantity }
+            productDao.updateProductQuantity(productName, productPrice, quantity)
         }
     }
 
