@@ -9,94 +9,95 @@
 
     <Button
         android:id="@+id/product_add_button"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="472dp"
+        android:layout_width="@dimen/_130sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/add_item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/open_excel_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/open_excel_button"
+        app:layout_constraintTop_toBottomOf="@+id/open_excel_button" />
 
     <Button
         android:id="@+id/open_excel_button"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="@dimen/_130sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_24sdp"
         android:text="@string/open_excel"
-        app:layout_constraintBottom_toTopOf="@+id/product_add_button"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/product_name"
+        app:layout_constraintTop_toTopOf="@+id/product_name" />
+
+    <EditText
+        android:id="@+id/product_name"
+        android:layout_width="@dimen/_134sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:autofillHints="@string/item_name_text"
+        android:hint="@string/item_name_text"
+        android:inputType="text"
+        android:textSize="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <EditText
         android:id="@+id/product_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="@dimen/_134sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:autofillHints="@string/item_price_text"
         android:hint="@string/item_price_text"
         android:inputType="numberDecimal"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/product_quantity"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="@+id/product_name"
+        app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
     <TextView
         android:id="@+id/product_quantity_label"
-        android:layout_width="100dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="440dp"
+        android:layout_width="@dimen/_96sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         android:text="@string/item_count"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="@+id/product_price"
+        app:layout_constraintTop_toBottomOf="@+id/product_price" />
 
     <EditText
         android:id="@+id/product_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="9dp"
-        android:layout_marginBottom="449dp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:autofillHints="@string/item_count_text"
         android:hint="@string/item_count_text"
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:inputType="numberSigned"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/product_quantity_label" />
-
-    <EditText
-        android:id="@+id/product_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:autofillHints="@string/item_name_text"
-        android:hint="@string/item_name_text"
-        android:inputType="text"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/product_price"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/product_quantity_label"
+        app:layout_constraintTop_toTopOf="@+id/product_quantity_label" />
 
     <LinearLayout
         android:id="@+id/recycler_view_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/product_quantity_label"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_quantity_label"
+        app:layout_constraintVertical_bias="1.0">
 
         <TextView
             android:id="@+id/product_date_header_label"
             style="@style/Widget.Inventory.Header"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="6sp"
-            android:layout_weight="1.8"
             android:gravity="start"
             android:text="@string/product_date_label"
             android:textAlignment="center"
@@ -105,32 +106,31 @@
         <TextView
             android:id="@+id/product_name_header_label"
             style="@style/Widget.Inventory.Header"
-            android:text="@string/product_name_label"
-            android:layout_width="0sp"
+            android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:text="@string/product_name_label"
             android:textAlignment="center"
-            android:layout_weight="1.8"
             tools:ignore="RtlCompat" />
 
         <TextView
             android:id="@+id/product_price_header_label"
             style="@style/Widget.Inventory.Header"
-            android:layout_width="0sp"
+            android:layout_width="@dimen/_50sdp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
             android:text="@string/product_price_label"
-            android:textAlignment="center"
-            android:layout_weight="0.8"/>
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/product_quantity_header_label"
             style="@style/Widget.Inventory.Header"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/_56sdp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/_10sdp"
             android:text="@string/product_quantity_label"
-            android:textAlignment="center"
-            android:layout_weight="0.8"/>
+            android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -143,14 +143,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:clipToPadding="true"
         android:id="@+id/recycler_view"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:clipToPadding="true"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="0dp"
         android:layout_weight="1"
+        tools:listitem="@layout/product_entity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

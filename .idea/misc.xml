@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/drawable/edit_icon_button_foreground.xml" value="0.1655" />
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.249" />
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/layout/edit_product_dialog.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/layout/fragment_products.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/TrackerApp/app/src/main/res/layout/product_entity.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/yasen/AndroidStudioProjects/TrackerApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2885" />
         <entry key="..\:/Users/yasen/AndroidStudioProjects/TrackerApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2885" />
         <entry key="..\:/Users/yasen/AndroidStudioProjects/TrackerApp/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.2885" />

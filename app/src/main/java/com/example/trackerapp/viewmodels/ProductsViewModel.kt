@@ -3,6 +3,8 @@ package com.example.trackerapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.trackerapp.MainActivity
+import com.example.trackerapp.ProductsFragment
 import com.example.trackerapp.database.item.DateTypeConverter
 import com.example.trackerapp.database.item.Product
 import com.example.trackerapp.database.item.ProductDao
@@ -66,7 +68,19 @@ class ProductsViewModel(private val productDao: ProductDao) : ViewModel() {
         }
     }
 
-    private fun getNewProductEntry(productName: String, productPrice: Double, productQuantity: Int): Product {
+    fun updateProduct(product: Product){
+        CoroutineScope(Dispatchers.IO).launch {
+            productDao.update(product)
+        }
+    }
+
+    fun deleteProduct(product: Product){
+        CoroutineScope(Dispatchers.IO).launch {
+           productDao.delete(product)
+        }
+    }
+
+    fun getNewProductEntry(productName: String, productPrice: Double, productQuantity: Int): Product {
         println("getNewProductEntry called")
         return Product(
             productName = productName,

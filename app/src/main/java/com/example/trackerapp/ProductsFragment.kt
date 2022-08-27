@@ -1,10 +1,11 @@
 package com.example.trackerapp
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -14,12 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trackerapp.adapters.ProductsAdapter
 import com.example.trackerapp.database.ProductsApplication
+import com.example.trackerapp.database.item.Product
+import com.example.trackerapp.databinding.EditProductDialogBinding
 import com.example.trackerapp.databinding.FragmentProductsBinding
 import com.example.trackerapp.viewmodels.ProductsViewModel
 import com.example.trackerapp.viewmodels.ProductsViewModelFactory
 import kotlinx.coroutines.*
-import kotlin.coroutines.coroutineContext
 
+
+private const val TAG = "ProductsFragment"
 
 class ProductsFragment : Fragment() {
 
@@ -47,7 +51,11 @@ class ProductsFragment : Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.context)
 
-        val productsAdapter = ProductsAdapter {}
+        val productsAdapter = ProductsAdapter {
+            onEditProductDialog(it)
+            activity?.let { it -> hideKeyboard(it) }
+        }
+
         recyclerView.adapter = productsAdapter
 
         lifecycle.coroutineScope.launch {
@@ -62,9 +70,7 @@ class ProductsFragment : Fragment() {
 
         // When Enter is pressed on last edit text box add item by default,
         binding.productQuantity.setOnEditorActionListener{ _, actionId, event ->
-            if(KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_UP == event.action){
-                addNewProduct()
-            }
+            addNewProduct()
             true
         }
     }
@@ -87,6 +93,9 @@ class ProductsFragment : Fragment() {
     }
 
     private fun isEntryValid(): Boolean {
+        binding.productQuantity?.setText(
+            binding.productQuantity.text.toString().toIntOrNull()?.toString() ?: "1")
+
         return viewModel.isEntryValid(
             binding.productName.text.toString(),
             binding.productPrice.text.toString().toDoubleOrNull(),
@@ -108,7 +117,53 @@ class ProductsFragment : Fragment() {
             toast.show()
         }
         activity?.let { it -> hideKeyboard(it) }
-        //clearInputFields()
+        clearInputFields()
+        binding.productName.requestFocus()
+    }
+
+    private fun onEditProductDialog(product: Product){
+        val alertBuilder = AlertDialog.Builder(context)
+        val editProductDialogBinding: EditProductDialogBinding =
+            EditProductDialogBinding.inflate(LayoutInflater.from(context))
+
+        editProductDialogBinding.editDialogProductName.setText(product.productName)
+        editProductDialogBinding.editDialogProductQuantity.setText(product.productQuantity.toString())
+        editProductDialogBinding.editDialogProductPrice.setText(product.productPrice.toString())
+
+        alertBuilder.setTitle("Edit Product: \"" + product.productName + "\"")
+        alertBuilder.setView(editProductDialogBinding.root)
+
+        alertBuilder.setPositiveButton("Edit"){dialogInterface, which ->
+            val prodName = editProductDialogBinding.editDialogProductName.text.toString()
+            val prodPrice = editProductDialogBinding.editDialogProductPrice.text.toString().toDoubleOrNull()
+            val prodQuantity = editProductDialogBinding.editDialogProductQuantity.text.toString().toIntOrNull()
+
+            val validInput = viewModel.isEntryValid(prodName, prodPrice, prodQuantity)
+
+            if(validInput && prodPrice != null && prodQuantity != null){
+                product.productName = prodName
+                product.productPrice = prodPrice
+                product.productQuantity = prodQuantity
+                viewModel.updateProduct(product)
+                recyclerView.adapter?.notifyDataSetChanged()
+            }
+            else {
+                Toast.makeText(context, "Invalid Edit data", Toast.LENGTH_SHORT)
+            }
+            activity?.let { it -> hideKeyboard(it) }
+        }
+
+        alertBuilder.setNegativeButton("Cancel") { dialogInterface, which -> }
+
+        alertBuilder.setNeutralButton("Delete") { dialogInterface, which ->
+            viewModel.deleteProduct(product)
+        }
+
+        val alertDialog: AlertDialog = alertBuilder.create()
+        // cancel if backButton is clicked
+        alertDialog.setCancelable(true)
+        alertDialog.show()
+
     }
 
     override fun onDestroyView() {

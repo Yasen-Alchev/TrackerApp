@@ -16,6 +16,6 @@ class DateTypeConverter {
     }
 
     companion object{
-        val FORMATTER = SimpleDateFormat("yyy-MM-dd")
+        const val DATE_PATTERN = "yyyy-MM-dd"
     }
 }

@@ -1,11 +1,7 @@
 package com.example.trackerapp.database.item
 
-import android.content.ClipData
-import androidx.databinding.adapters.Converters
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import java.util.*
 
 @Dao
 interface ProductDao {
@@ -17,6 +13,12 @@ interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg products: Product)
+
+    @Update
+    fun update(product: Product)
+
+    @Query("UPDATE product SET product_name = :productName, product_price = :productPrice, product_quantity = :productQuantity WHERE product.rowid == :productUid")
+    fun update2(productUid: Int, productName: String, productPrice: Double, productQuantity: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(product: Product)

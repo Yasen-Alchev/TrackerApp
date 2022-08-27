@@ -6,7 +6,7 @@ import java.util.*
 
 //, primaryKeys = ["itemName", "itemPrice"]
 
-@Fts4
+//@Fts4
 @Entity(tableName = "product")
 data class Product(
     @PrimaryKey(autoGenerate = true) @NonNull @ColumnInfo(name = "rowid")
@@ -14,11 +14,11 @@ data class Product(
     @NonNull @ColumnInfo(name = "date") @TypeConverters(DateTypeConverter::class)
     var date: Date,
     @NonNull @ColumnInfo(name = "product_name")
-    val productName: String,
+    var productName: String,
     @NonNull @ColumnInfo(name = "product_price")
-    val productPrice: Double,
+    var productPrice: Double,
     @NonNull @ColumnInfo(name = "product_quantity")
-    val productQuantity: Int,
+    var productQuantity: Int,
 
 ){
     override fun toString(): String {
